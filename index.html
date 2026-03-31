@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حبيبة مصطفى | مصممة جرافيك إبداعية</title>
+    
+    <!-- Google Fonts: Cairo for modern Arabic typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mint: '#c3e3d6',
+                        mustard: '#f4a222',
+                        blush: '#f9c5d1',
+                        dark: '#1d232a',
+                        glass: 'rgba(255, 255, 255, 0.25)',
+                        glassDark: 'rgba(255, 255, 255, 0.5)'
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            overflow-x: hidden;
+            color: #1d232a;
+            scroll-behavior: smooth;
+        }
+
+        /* 3D Canvas fixed at background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none; /* Allows clicking on elements above */
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Blob Image Animation */
+        .blob-img {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: blob-morph 8s ease-in-out infinite alternate;
+            box-shadow: 0 15px 35px rgba(244, 162, 34, 0.3);
+            transition: all 0.5s ease;
+        }
+        
+        .blob-img:hover {
+            transform: scale(1.02) rotate(-2deg);
+            box-shadow: 0 20px 40px rgba(195, 227, 214, 0.6);
+        }
+
+        @keyframes blob-morph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f4a222; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d98d1a; 
+        }
+
+        /* Floating Animation for elements */
+        .float-anim {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(90deg, #f4a222, #e56b85);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="relative antialiased selection:bg-mustard selection:text-white">
+
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="glass-nav fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-black text-dark tracking-tighter flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-gradient-to-tr from-mustard to-mint flex items-center justify-center text-white text-sm"><i class="fa-solid fa-palette"></i></span>
+                حبيبة<span class="text-mustard">.</span>مصطفى
+            </a>
+            <div class="hidden md:flex gap-8 font-semibold text-gray-700">
+                <a href="#home" class="hover:text-mustard transition">الرئيسية</a>
+                <a href="#about" class="hover:text-mustard transition">من أنا</a>
+                <a href="#services" class="hover:text-mustard transition">خدماتي</a>
+                <a href="#portfolio" class="hover:text-mustard transition">معرض الأعمال</a>
+            </div>
+            <a href="#contact" class="hidden md:flex bg-dark text-white px-6 py-2 rounded-full hover:bg-mustard transition-colors duration-300 font-bold shadow-lg shadow-mustard/30">
+                تواصل معي
+            </a>
+            <!-- Mobile Menu Button (simplified) -->
+            <button class="md:hidden text-dark text-2xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center pt-24 pb-12 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-12 w-full">
+            
+            <!-- Text Content -->
+            <div class="flex-1 text-center md:text-right">
+                <div class="inline-block bg-white/80 backdrop-blur-sm border border-mint text-mint-800 px-4 py-1 rounded-full text-sm font-bold mb-6 text-emerald-600 shadow-sm">
+                    ✨ إبداع، شغف، ولمسة ساحرة
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black mb-4 leading-tight">
+                    مرحباً بك في <br>
+                    <span class="text-gradient">عالمي الإبداعي</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-700 mb-8 font-semibold">
+                    أنا <span class="text-mustard">حبيبة مصطفى</span>، مصممة جرافيك بخبرة ولمسة فنية تحول أفكارك إلى تصاميم تخطف الأنظار وتبني جسوراً من الثقة مع عملائك.
+                </p>
+                
+                <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                    <a href="#contact" class="bg-mustard text-white px-8 py-3 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-lg shadow-mustard/40 flex items-center gap-2">
+                        <i class="fa-solid fa-rocket"></i> لنبدأ مشروعك
+                    </a>
+                    <a href="https://www.behance.net/mostafaabas1" target="_blank" class="glass-card text-dark px-8 py-3 rounded-full text-lg font-bold hover:bg-white transition-colors flex items-center gap-2">
+                        <i class="fa-brands fa-behance text-blue-600"></i> شاهد أعمالي
+                    </a>
+                </div>
+
+                <!-- Stats/Highlights -->
+                <div class="mt-12 flex gap-8 justify-center md:justify-start">
+                    <div class="text-center">
+                        <h3 class="text-3xl font-black text-dark">+100</h3>
+                        <p class="text-sm text-gray-600 font-semibold">مشروع ناجح</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-3xl font-black text-dark">100%</h3>
+                        <p class="text-sm text-gray-600 font-semibold">رضا العملاء</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-3xl font-black text-dark">إبداع</h3>
+                        <p class="text-sm text-gray-600 font-semibold">بلا حدود</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Content -->
+            <div class="flex-1 flex justify-center md:justify-end relative">
+                <!-- Decorative background elements behind image -->
+                <div class="absolute inset-0 bg-mint/40 rounded-full blur-3xl w-72 h-72 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0"></div>
+                
+                <img src="WhatsApp Image 2026-03-30 at 14.41.34.jpg" alt="حبيبة مصطفى - مصممة جرافيك" class="blob-img w-72 md:w-96 h-72 md:h-96 object-cover object-top relative z-10 border-4 border-white">
+                
+                <!-- Floating Badges -->
+                <div class="absolute top-10 right-0 md:-right-10 glass-card p-3 rounded-2xl flex items-center gap-3 float-anim z-20">
+                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-500 text-xl">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-500">لمسة</p>
+                        <p class="text-sm font-black text-dark">أنثوية مبدعة</p>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-10 left-0 md:-left-10 glass-card p-3 rounded-2xl flex items-center gap-3 float-anim z-20" style="animation-delay: 1.5s;">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-mustard text-xl">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-500">جودة</p>
+                        <p class="text-sm font-black text-dark">احترافية</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-black text-mustard tracking-wider uppercase mb-2">ماذا أقدم؟</h2>
+                <h3 class="text-4xl md:text-5xl font-black text-dark">خدمات تصميم <span class="text-mint-600" style="color:#2d6a4f">متكاملة</span></h3>
+                <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">أدمج بين الفن الاستثنائي والفهم العميق لمتطلبات السوق لتقديم هوية بصرية لا تُنسى.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="glass-card p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 group cursor-pointer">
+                    <div class="w-16 h-16 rounded-2xl bg-mint/30 flex items-center justify-center text-emerald-600 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-pen-nib"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">تصميم الهوية البصرية</h4>
+                    <p class="text-gray-600 leading-relaxed">بناء لوجوهات وهويات بصرية متكاملة تعكس روح علامتك التجارية وتجعلها مميزة ومحفورة في أذهان عملائك.</p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="glass-card p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 group cursor-pointer">
+                    <div class="w-16 h-16 rounded-2xl bg-mustard/20 flex items-center justify-center text-mustard text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">تصاميم السوشيال ميديا</h4>
+                    <p class="text-gray-600 leading-relaxed">بوستات، ستوريز، وبنرات إعلانية جذابة ومدروسة تزيد من تفاعل الجمهور وترفع من مبيعاتك.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="glass-card p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 group cursor-pointer">
+                    <div class="w-16 h-16 rounded-2xl bg-blush/30 flex items-center justify-center text-pink-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">الدمج الرقمي والإبداعي</h4>
+                    <p class="text-gray-600 leading-relaxed">تصاميم Manipulation مبتكرة لدمج الصور وإخراج لوحات فنية دعائية تلفت الانتباه وتوصل فكرتك بقوة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Me Section -->
+    <section id="about" class="py-20 relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="glass-card rounded-[3rem] p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden">
+                <!-- BG Decoration -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-mustard/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-mint/40 rounded-full blur-3xl"></div>
+
+                <div class="flex-1 relative z-10">
+                    <h2 class="text-4xl font-black mb-6">لماذا تختار العمل معي؟</h2>
+                    <ul class="space-y-6">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center text-mustard shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold">رؤية شبابية ومواكبة للتريند</h4>
+                                <p class="text-gray-600 mt-1">تصاميمي ليست مجرد ألوان، بل هي أفكار حية (روشة) تتماشى مع أحدث صيحات التصميم العالمية.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center text-mustard shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold">دقة واهتمام بالتفاصيل</h4>
+                                <p class="text-gray-600 mt-1">كل بيكسل في التصميم له معنى، أهتم بالتفاصيل الدقيقة لأخرج لك عملاً خالياً من العيوب.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center text-mustard shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold">التزام وسرعة في التسليم</h4>
+                                <p class="text-gray-600 mt-1">أقدر وقت العميل جيداً، العمل الاحترافي لا يعني التأخير، بل يعني الإنجاز بذكاء.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="flex-1 flex justify-center z-10">
+                    <div class="relative w-full max-w-sm">
+                        <div class="glass-card w-full aspect-square rounded-[3rem] p-6 flex flex-col justify-center items-center text-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <i class="fa-solid fa-quote-right text-5xl text-mint-500 mb-6" style="color:#a3c9a8"></i>
+                            <p class="text-xl font-bold leading-relaxed text-dark">
+                                "التصميم الجيد هو الذي لا يجعلك تفكر كثيراً.. بل تشعر بالإعجاب فوراً!"
+                            </p>
+                            <span class="mt-4 font-black text-mustard">- حبيبة مصطفى</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action / Contact -->
+    <section id="contact" class="py-24 relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-6xl font-black mb-6">جاهز لتحويل فكرتك إلى <span class="text-gradient">حقيقة؟</span></h2>
+            <p class="text-xl text-gray-700 mb-10">لا تتردد في التواصل معي الآن لنتناقش حول مشروعك القادم ونبدأ رحلة الإبداع.</p>
+            
+            <div class="flex flex-wrap justify-center gap-6">
+                <!-- WhatsApp -->
+                <a href="https://wa.me/201091750493" target="_blank" class="flex items-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full text-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-green-500/30">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    تواصل عبر واتساب
+                </a>
+                
+                <!-- Behance -->
+                <a href="https://www.behance.net/mostafaabas1" target="_blank" class="flex items-center gap-3 bg-[#1769ff] text-white px-8 py-4 rounded-full text-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-blue-500/30">
+                    <i class="fa-brands fa-behance text-2xl"></i>
+                    معرض أعمالي
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/habiba.mostafa20200" target="_blank" class="flex items-center gap-3 bg-[#1877F2] text-white px-8 py-4 rounded-full text-xl font-bold hover:scale-105 transition-transform shadow-lg shadow-blue-600/30">
+                    <i class="fa-brands fa-facebook-f text-2xl"></i>
+                    تابعني
+                </a>
+            </div>
+            
+            <p class="mt-8 text-xl font-bold text-dark dir-ltr tracking-widest">
+                <i class="fa-solid fa-phone mr-2 text-mustard"></i> +20 109 175 0493
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-nav py-8 relative z-10 border-t border-white/50">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-dark font-bold">© 2026 حبيبة مصطفى. جميع الحقوق محفوظة.</p>
+            <div class="flex gap-4">
+                <a href="https://www.behance.net/mostafaabas1" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-blue-600 hover:scale-110 transition-all shadow-sm"><i class="fa-brands fa-behance"></i></a>
+                <a href="https://www.facebook.com/habiba.mostafa20200" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-blue-600 hover:scale-110 transition-all shadow-sm"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://wa.me/201091750493" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-green-500 hover:scale-110 transition-all shadow-sm"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js for Interactive 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        window.onload = function() {
+            // Setup Scene
+            const canvas = document.querySelector('#bg-canvas');
+            const scene = new THREE.Scene();
+            
+            // Camera setup
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 20;
+
+            // Renderer setup
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(10, 10, 10);
+            scene.add(pointLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(-10, 20, 20);
+            scene.add(directionalLight);
+
+            // Create Objects (Abstract design elements)
+            const objects = [];
+            
+            // Material styling (Glassy / vibrant)
+            const getMaterial = (color) => new THREE.MeshPhysicalMaterial({
+                color: color,
+                metalness: 0.2,
+                roughness: 0.1,
+                transmission: 0.5, // glass-like
+                thickness: 0.5,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.1
+            });
+
+            // 1. Torus Knot (Complex shape representing creativity)
+            const geometry1 = new THREE.TorusKnotGeometry(2, 0.6, 100, 16);
+            const torusKnot = new THREE.Mesh(geometry1, getMaterial(0xf4a222)); // Mustard
+            torusKnot.position.set(12, 5, -5);
+            scene.add(torusKnot);
+            objects.push({ mesh: torusKnot, rotX: 0.005, rotY: 0.01 });
+
+            // 2. Icosahedron
+            const geometry2 = new THREE.IcosahedronGeometry(2.5, 0);
+            const icosahedron = new THREE.Mesh(geometry2, getMaterial(0xa3c9a8)); // Mint
+            icosahedron.position.set(-14, -6, -10);
+            scene.add(icosahedron);
+            objects.push({ mesh: icosahedron, rotX: 0.01, rotY: 0.005 });
+
+            // 3. Cylinder / Ring
+            const geometry3 = new THREE.TorusGeometry(3, 0.8, 16, 100);
+            const torus = new THREE.Mesh(geometry3, getMaterial(0xf9c5d1)); // Blush Pink
+            torus.position.set(8, -10, -8);
+            scene.add(torus);
+            objects.push({ mesh: torus, rotX: 0.008, rotY: 0.008 });
+
+            // 4. Floating Cone/Pyramid
+            const geometry4 = new THREE.ConeGeometry(2, 4, 4);
+            const cone = new THREE.Mesh(geometry4, getMaterial(0x1d232a)); // Dark
+            cone.position.set(-10, 8, -15);
+            scene.add(cone);
+            objects.push({ mesh: cone, rotX: 0.01, rotY: 0.015 });
+
+            // Mouse interaction logic
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            });
+
+            // Scroll interaction logic
+            let scrollY = window.scrollY;
+            window.addEventListener('scroll', () => {
+                scrollY = window.scrollY;
+            });
+
+            // Resize handling
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                const elapsedTime = clock.getElapsedTime();
+
+                // Smooth mouse parallax effect for Camera
+                targetX = mouseX * 0.002;
+                targetY = mouseY * 0.002;
+                
+                camera.position.x += (targetX - camera.position.x) * 0.05;
+                camera.position.y += (-targetY - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                // Rotate objects and add floating effect based on scroll and time
+                objects.forEach((obj, index) => {
+                    obj.mesh.rotation.x += obj.rotX;
+                    obj.mesh.rotation.y += obj.rotY;
+                    
+                    // Float up and down slowly
+                    obj.mesh.position.y += Math.sin(elapsedTime * 2 + index) * 0.01;
+                    
+                    // Scroll effect on Y axis
+                    obj.mesh.position.y = obj.mesh.position.y + ((-scrollY * 0.005) - obj.mesh.position.y) * 0.05;
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            // Start animation
+            animate();
+        };
+    </script>
+</body>
+</html>
